@@ -23,11 +23,11 @@ router.post('/login', (req, res, next) => {
     })(req, res, next);
 });
 
-router.get('/register', (req, res) => {
+router.get('/register', auth.isAdminLoggedIn, (_req, res) => {
     res.render('register');
 });
 
-router.post('/register', (req, res) => {
+router.post('/register', auth.isAdminLoggedIn, (req, res) => {
     const { username, password1, password2 } = req.body;
     let error = false;
     if (!username || !password1 || !password2) {
@@ -83,18 +83,18 @@ router.get('/home', auth.isAdminLoggedIn, (req, res) => {
     /*
     Links to:
         Users page (View, add, edit)
-        Attendace
+        Attendance
     */
     res.send('HOME PAGE');
 });
 
-router.get('/students', auth.isAdminLoggedIn, (req, res) => {
+router.get('/students', (req, res) => {
     /*
     Table of students
     Options to add, edit and remove
     Link to all students (past also)
     */
-    res.send('STUDENTS PAGE');
+    res.render('students');
 });
 
 router.get('/students/all', auth.isAdminLoggedIn, (req, res) => {

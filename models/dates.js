@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 // Other dates are considered as holidays
 const dateSchema = mongoose.Schema({
     date: { type: Date, default: Date.now, required: true },
-    batch: { type: String, default: 'default', required: true }, // The batch with which this date is concerned
+    batch: { type: String, default: 'default', required: true },
     adminName: { type: String, required: true }, // The admin who took the attendance
 });
 

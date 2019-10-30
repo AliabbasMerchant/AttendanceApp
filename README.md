@@ -22,3 +22,6 @@ Its 8:30 pm, and I now begin. I have my laptop (with a mouse attached to it), pa
 
 Lets see how fast I can copy pasta and build a working system, according to the requirements!
 Lets begin!
+
+## Updates
+31/10/19 00:09: I have worked for approx 3.5 hours

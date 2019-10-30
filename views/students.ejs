@@ -1,0 +1,86 @@
+<% include ./layouts/header %>
+
+<div class="container container-fluid mt-3 text-dark text-center">
+    <div class="heading-1 bold mb-3">Students</div>
+
+    <a class="btn btn-secondary mb-2" href="/all_students">All Students</a>
+    <br>
+    <button type="button" class="btn btn-primary glyphicon mb-4" data-toggle="modal" data-target="#studentModal"
+        data-id=""><span>&#x2b;</span> Add Student</button>
+
+    <div class="row text-center">
+        <div class="table-responsive mx-auto"></div>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Batch</th>
+                    <th scope="col">Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td scope="row">name</td>
+                    <td>batch</td>
+                    <td><span class="glyphicon" style="cursor: pointer;" data-toggle="modal" data-target="#studentModal"
+                            data-name="name" data-batch="batch" data-id="id">&#x270f;</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="modal fade" id="studentModal" tabindex="-1" role="dialog" aria-labelledby="studentModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="studentModalLabel">Edit Student</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="student-form" action="/modify_student" method="POST">
+                        <div class="form-group">
+                            <label for="name" class="col-form-label">Name</label>
+                            <input type="text" class="form-control name_input" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="batch" class="col-form-label">Batch</label>
+                            <input type="text" class="form-control batch_input" name="batch" required>
+                        </div>
+                        <div class="form-group" hidden>
+                            <input type="text" class="form-control id_input" name="id">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger delete-button">Delete</button>
+                    <button type="button" class="btn btn-primary save-button">Save</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<% include ./layouts/footer %>
+
+<script>
+    $('#studentModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var modal = $(this);
+        var id = button.data('id');
+        modal.find('.name_input').val(id);
+        modal.find('.name_input').val(button.data('name'));
+        modal.find('.batch_input').val(button.data('batch'));
+        if (id == "") {
+            modal.find('.delete-button').hide();
+        }
+        $("#save-button").click(function () {
+            $("#student-form").submit();
+        });
+    })
+</script>

@@ -5,7 +5,6 @@ const studentSchema = mongoose.Schema({
     created: { type: Date, default: Date.now, required: true },
     deleted: { type: Date },
     batch: { type: String, default: 'default', required: true },
-    group: { type: String },
     attendance: [{
         date: { type: Date, default: Date.now, required: true }, // Added only if (s)he is present
     }],
