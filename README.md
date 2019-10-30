@@ -6,7 +6,6 @@ My friend, a few days ago, told me to make an attendance app for his class.
 Requirements:  
 * Login for admin(s)
 * PWA
-* Only a single register, as it is only for a single app
 * Ability to add users
 * Very easy selection of present students
 * A bit of statistics/analysis
