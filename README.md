@@ -1,4 +1,4 @@
-# AttendanceApp
+# Attendance App
 A simple attendance app
 
 ## Background & Requirements
@@ -21,4 +21,5 @@ I knew it was a simple task, so I thought of doing it in a coding sprint. Sort o
 
 Its 8:30 pm, and I now begin. I have my laptop (with a mouse attached to it), paper and pen and a water bottle with me. (And obviously Google, SO, GitHub, etc to help me out)
 
+Lets see how fast I can copy pasta and build a working system, according to the requirements!
 Lets begin!

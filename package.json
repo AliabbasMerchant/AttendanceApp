@@ -1,0 +1,36 @@
+{
+  "name": "attendanceapp",
+  "version": "1.0.0",
+  "description": "A simple attendance app",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AliabbasMerchant/AttendanceApp.git"
+  },
+  "keywords": [
+    "MongoDB",
+    "Mongoose",
+    "NodeJS"
+  ],
+  "author": "Aliabbas Merchant",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AliabbasMerchant/AttendanceApp/issues"
+  },
+  "homepage": "https://github.com/AliabbasMerchant/AttendanceApp#readme",
+  "dependencies": {
+    "bcrypt": "^3.0.6",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.4",
+    "ejs": "^2.7.1",
+    "express": "^4.17.1",
+    "express-session": "^1.17.0",
+    "mongoose": "^5.7.7",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0"
+  }
+}
