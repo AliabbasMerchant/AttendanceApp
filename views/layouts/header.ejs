@@ -24,6 +24,7 @@
 
                 <ul class="navbar-nav  ml-auto">
                     <% if (user) { %>
+                    <a class="nav-link dark-gray" href="#"><%= user.username %></a>
                     <a class="nav-link dark-gray" href="/logout">Logout</a>
                     <% } %>
                 </ul>
