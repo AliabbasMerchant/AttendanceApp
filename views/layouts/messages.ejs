@@ -1,0 +1,23 @@
+<%# for flash messages %>
+<% if(typeof error_msgs != 'undefined' && error_msgs != '') { %>
+    <% error_msgs.forEach(error => { %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <%= error %>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    <% }); %>
+<% } %>
+
+<%# for flash messages %>
+<% if(typeof success_msgs != 'undefined' && success_msgs != '') { %>
+    <% success_msgs.forEach(msg => { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <%= msg %>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    <% }); %>
+<% } %>
