@@ -1,14 +1,14 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const studentSchema = mongoose.Schema({
     name: { type: String, required: true },
     created: { type: Date, default: Date.now, required: true },
     deleted: { type: Date },
-    batch: { type: String, default: "default", required: true },
+    batch: { type: String, default: 'default', required: true },
     group: { type: String },
     attendance: [{
         date: { type: Date, default: Date.now, required: true }, // Added only if (s)he is present
     }],
 });
 
-module.exports = mongoose.model("attendance_student", studentSchema);
+module.exports = mongoose.model('attendance_student', studentSchema);

@@ -1,7 +1,7 @@
 // importing modules
-const express = require("express");
+const express = require('express');
 const bodyParser = require('body-parser');
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const session = require('express-session');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
@@ -14,8 +14,8 @@ mongoose.connect(process.env.MONGO_CONNECTION_STRING, { useNewUrlParser: true })
 
 // setting up the app
 const app = express();
-app.set("view engine", "ejs");
-app.use(express.static(__dirname + "/public"));
+app.set('view engine', 'ejs');
+app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -36,10 +36,10 @@ app.use(passport.session());
 app.use((req, res, next) => {
     res.locals.user = req.user;
     next();
-})
+});
 
 // routes
-app.get("*", (req, res) => res.send("PAGE NOT FOUND"));
+app.use('/', require('routes'));
 
 // starting server
 app.listen(process.env.PORT, process.env.IP);
