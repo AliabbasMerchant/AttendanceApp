@@ -7,8 +7,8 @@ const Admin = require('../models/admin');
 
 module.exports = function(passport) {
     passport.use('admin-local',
-        new LocalStrategy({ usernameField: 'name' }, (name, password, done) => {
-            Admin.findOne({ name: name })
+        new LocalStrategy({ usernameField: 'username' }, (username, password, done) => {
+            Admin.findOne({ username: username })
             .then(admin => {
                 if (!admin) {
                     // Admin not found

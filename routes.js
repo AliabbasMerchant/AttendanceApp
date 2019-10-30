@@ -8,7 +8,7 @@ router.get('/', (_req, res) => {
 });
 
 router.get('/login', (_req, res) => {
-    res.send('LOGIN PAGE');
+    res.render("login");
 });
 
 router.post('/login', (req, res) => {
@@ -23,6 +23,12 @@ router.post('/register', auth.isAdminLoggedIn, (req, res) => {
     // TODO
 });
 
+router.get('/logout', auth.isAdminLoggedIn, (req, res) => {
+    req.logout();
+    req.flash('success_msgs', 'Successfully logged out');
+    res.redirect('/');
+});
+
 router.get('/home', auth.isAdminLoggedIn, (req, res) => {
     /*
     Links to:
@@ -35,8 +41,17 @@ router.get('/home', auth.isAdminLoggedIn, (req, res) => {
 router.get('/students', auth.isAdminLoggedIn, (req, res) => {
     /*
     Table of students
+    Options to add, edit and remove
+    Link to all students (past also)
     */
-    res.send('HOME PAGE');
+    res.send('STUDENTS PAGE');
+});
+
+router.get('/students/all', auth.isAdminLoggedIn, (req, res) => {
+    /*
+    Table of all students
+    */
+    res.send('ALL STUDENTS PAGE');
 });
 
 router.get('/attendance', auth.isAdminLoggedIn, (req, res) => {

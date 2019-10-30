@@ -1,0 +1,100 @@
+.multiline {
+    white-space: pre-wrap;
+}
+
+.footer {
+    font-family: Arial, Helvetica, sans-serif !important;
+    width: 100%;
+    margin-top: 100px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    background-color: #333;
+    color: #fff;
+}
+
+.icon {
+    font-size: 1.8rem;
+    color: #fff !important;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.heading-1 {
+    font-weight: 300;
+    font-size: 2.5rem;
+}
+
+.heading-2 {
+    font-weight: 300;
+    font-size: 2rem;
+}
+
+.heading-3 {
+    font-weight: 300;
+    font-size: 1.5rem;
+}
+
+.heading-4 {
+    font-weight: 300;
+    font-size: 1.2rem;
+}
+
+.para-0 {
+    font-weight: 300;
+    font-size: 2.2rem;
+}
+
+.para-1 {
+    font-weight: 300;
+    font-size: 1.3rem;
+}
+
+.para-2 {
+    font-weight: 300;
+    font-size: 1.1rem;
+}
+
+.para-3 {
+    font-weight: 300;
+    font-size: 1rem;
+}
+
+.navbar {
+    width: 100%;
+    top: 0;
+    z-index: 1;
+}
+
+.body-content {
+    width: 100%;
+}
+
+.table-text-centered td {
+    text-align: center;
+}
+
+.table-text-centered th {
+    text-align: center;
+}
+
+.table-no-padding td {
+    padding: 0;
+}
+
+.table-no-padding th {
+    padding: 0;
+}
+
+.bold {
+    font-weight: 600 !important;
+}
+
+.dark-gray {
+    color: #555 !important;
+}
+
+.required:after {
+    color: #e32;
+    content: ' *';
+    display: inline;
+}
