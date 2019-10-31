@@ -9,7 +9,11 @@ const cookieParser = require('cookie-parser');
 require('./config/passport')(passport);
 
 mongoose.connect(process.env.MONGO_CONNECTION_STRING, {
-    useNewUrlParser: true, dbName: 'testDB', useUnifiedTopology: true
+    dbName: 'testDB',
+    useNewUrlParser: true,
+    useFindAndModify: false,
+    useCreateIndex: true,
+    useUnifiedTopology: true,
 });
 
 const app = express();

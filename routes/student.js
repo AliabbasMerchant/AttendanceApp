@@ -3,7 +3,7 @@ const Student = require('../models/student');
 let studentRoutes = {};
 
 studentRoutes.studentsGetRoute = (_req, res) => {
-    Student.find({ deleted: '' }, "name batch", { sort: { batch: -1, created: -1 } }, (err, students) => {
+    Student.find({ deleted: '' }, "name batch", { sort: { batch: 1, created: -1 } }, (err, students) => {
         if (err) {
             console.log(err);
         }
@@ -14,7 +14,7 @@ studentRoutes.studentsGetRoute = (_req, res) => {
 };
 
 studentRoutes.allStudentsGetRoute = (_req, res) => {
-    Student.find({}, "name batch created deleted", { sort: { created: -1 } }, (err, students) => {
+    Student.find({}, "name batch created deleted", { sort: { batch: 1, created: -1 } }, (err, students) => {
         if (err) {
             console.log(err);
         }
@@ -25,7 +25,6 @@ studentRoutes.allStudentsGetRoute = (_req, res) => {
 };
 
 studentRoutes.modifyStudentPostRoute = (req, res) => {
-    console.log(req.body);
     const { id, name, batch } = req.body;
     if (!name) {
         req.flash('error_msgs', 'Please fill in all required fields');
@@ -63,7 +62,6 @@ studentRoutes.modifyStudentPostRoute = (req, res) => {
 };
 
 studentRoutes.deleteStudentGetRoute = (req, res) => {
-    console.log(req.params.id);
     if(!req.params.id) {
         req.flash('error_msgs', 'Please fill in all required fields');
         res.redirect('/students');
