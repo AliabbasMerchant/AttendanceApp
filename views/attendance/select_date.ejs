@@ -1,0 +1,37 @@
+<% include ../layouts/header %>
+
+<div class="container mt-3 text-dark">
+    <div class="row">
+        <div class="col-md-1 col-lg-2 col-xl-3"></div>
+        <div class="col-md-10 col-lg-8 col-xl-6 d-flex flex-column align-items-center justify-content-around">
+            <% include ../layouts/messages %>
+            <div class="my-3 heading-3 bold">Select Date</div>
+
+            <form action="<%= nextURL %>" method="GET">
+                <div class="row text-center d-flex flex-column">
+                    <div class="form-group">
+                        <label class="required bold" for="date">Date</label>
+                        <input type="date" class="form-control" id="date-input" value="" min="2019-11-01" max=""
+                            name="date" required>
+                    </div>
+                    <input type="text" name="batch" value="<%= batch %>" required hidden>
+                    <button type="submit" class="btn btn-outline-danger pl-4 pr-4">Go!</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-1 col-lg-2 col-xl-3"></div>
+    </div>
+</div>
+
+<% include ../layouts/footer %>
+
+<script>
+    var date = new Date();
+    dateString =
+        String(date.getFullYear()) + "-" +
+        String(date.getMonth() + 1).padStart(2, '0') + "-" +
+        String(date.getDate()).padStart(2, '0');
+    var dateInput = $('#date-input');
+    dateInput.attr("max", dateString);
+    dateInput.attr("value", dateString);
+</script>

@@ -57,6 +57,36 @@ router.get('/del_dates', (_req, res) => {
     });
 });
 
+router.get('/rem_att', (_req, res) => {
+    DateModel.deleteMany({}, (err) => {
+        res.send(err);
+    });
+    StudentModel.find({}, null, null, (err, students) => {
+        if (err) {
+            res.send(err);
+        } else {
+            students.forEach(student => {
+                student.attendance = [];
+                student.save((err, _student) => {
+                    if (err) {
+                        console.log(err);
+                    }
+                });
+            });
+        }
+    });
+});
+
+router.get('/clear', (_req, res) => {
+    DateModel.deleteMany({}, (err) => {
+        if(err) res.send(err);
+    });
+    StudentModel.deleteMany({}, (err) => {
+        if(err) res.send(err);
+    });
+    res.send("");
+});
+
 router.get('*', (_req, res) => {
     res.redirect('/dev');
 });

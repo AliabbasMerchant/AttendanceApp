@@ -35,12 +35,14 @@ router.get('/attendance', auth.isAdminLoggedIn, attendanceRoutes.attendanceGetRo
 
 router.post('/attendance', auth.isAdminLoggedIn, attendanceRoutes.attendancePostRoute);
 
+router.get('/view_attendance', auth.isAdminLoggedIn, attendanceRoutes.viewAttendanceGetRoute);
+
 if(process.env.DEVELOPER) {
     router.use('/dev', require('./developer'));
 }
 
 router.get('*', (_req, res) => {
-    res.redirect('/')
+    res.redirect('/');
 });
 
 module.exports = router;

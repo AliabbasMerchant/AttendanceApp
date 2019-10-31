@@ -33,10 +33,12 @@ studentRoutes.modifyStudentPostRoute = (req, res) => {
     }
     if (!id) { // create new student
         let newStudent;
+        const created = new Date();
+        created.setUTCHours(0, 0, 0, 0);
         if (!batch) {
-            newStudent = new Student({ name });
+            newStudent = new Student({ name, created });
         } else {
-            newStudent = new Student({ name, batch });
+            newStudent = new Student({ name, batch, created });
         }
         newStudent.save()
             .then(_student => {
@@ -67,7 +69,9 @@ studentRoutes.deleteStudentGetRoute = (req, res) => {
         res.redirect('/students');
         return;
     }
-    Student.findOneAndUpdate({ _id: req.params.id }, { $set: { deleted: new Date() } }, { new: true, upsert: false }, (err, _student) => {
+    const deleted = new Date();
+    deleted.setUTCHours(0, 0, 0, 0);
+    Student.findOneAndUpdate({ _id: req.params.id }, { $set: { deleted } }, { new: true, upsert: false }, (err, _student) => {
         if (err) {
             console.log(err);
         }

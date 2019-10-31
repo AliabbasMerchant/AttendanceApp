@@ -19,8 +19,9 @@ attendanceRoutes.attendanceGetRoute = (req, res) => {
             if (err) {
                 console.log(err);
             }
-            res.render('attendance/batches', {
-                batches
+            res.render('attendance/select_batch', {
+                batches,
+                nextURL: "/attendance"
             });
         });
     }
@@ -37,15 +38,12 @@ attendanceRoutes.attendancePostRoute = (req, res) => {
         res.redirect('/attendance?batch=' + req.query.batch);
         return;
     }
-    if (!req.body.students) {
-        // No one tured up! Its a mass bunk! :)
-        req.body.students = [];
-    }
     const batch = req.query.batch;
     const date = new Date(req.body.date);
-    const students = typeof (req.body.students) == 'string' ? Array(req.body.students) : req.body.students;;
+    delete req.body.date;
+    const students = req.body;
     const adminName = req.user ? req.user.username : process.env.DEVELOPER;
-    // Should never happen. req.user is always defined, as we have the admin-logged-in guard is always on, except in dev mode
+    // Should never happen. req.user is always defined, as the admin-logged-in guard is always on, except in dev mode
 
     DateModel.findOneAndUpdate({ date, batch }, { $set: { date, batch, adminName } }, { new: true, upsert: true }, (err, _date) => {
         if (err) {
@@ -54,31 +52,51 @@ attendanceRoutes.attendancePostRoute = (req, res) => {
             res.redirect('/attendance?batch=' + batch);
         }
         else {
-            let left = students.length;
+            let left = Object.keys(students).length;
             let error = false;
-            students.forEach(student_id => {
+            for (const student_id in students) {
+                const present = students[student_id] == "present";
                 StudentModel.findById(student_id, (err, student) => {
                     if (err) {
                         console.log(err);
                         req.flash('error_msgs', 'Failed to find a student!');
                         error = true;
+                        left--;
                     }
                     else {
-                        let attendanceData = { date };
-                        if (!student.attendance.includes(attendanceData)) {
-                            student.attendance.push(attendanceData);
+                        let found = false;
+                        // this filtering is happening in memory. Not in the DB
+                        student.attendance = student.attendance.filter((obj, _index, _arr) => {
+                            if(String(obj.date) == String(date)) found = true;
+                            return String(obj.date) != String(date);
+                        });
+                        if (present && found) {
+                            left--;
+                        } else if(present && !found) {
+                            student.attendance.push({ date });
                             student.save((err, _student) => {
                                 if (err) {
                                     console.log(err);
                                     req.flash('error_msgs', `Failed to save a student's data!`);
                                     error = true;
                                 }
+                                left--;
                             });
+                        } else if(!present && found) {
+                            student.save((err, _student) => {
+                                if (err) {
+                                    console.log(err);
+                                    req.flash('error_msgs', `Failed to save a student's data!`);
+                                    error = true;
+                                }
+                                left--;
+                            });
+                        } else { // !present && !found
+                            left--;
                         }
                     }
-                    left--;
                 });
-            });
+            }
             var _flagCheck = setInterval(() => {
                 if (!left) {
                     clearInterval(_flagCheck);
@@ -88,6 +106,54 @@ attendanceRoutes.attendancePostRoute = (req, res) => {
             }, 100);
         }
     });
-}
+};
+
+attendanceRoutes.viewAttendanceGetRoute = (req, res) => {
+    const batch = req.query.batch;
+    const date = req.query.date;
+    if (batch) {
+        if (date) {
+            DateModel.findOne({ date, batch }, null, {}, (err, dateModel) => {
+                if (err) {
+                    console.log(err);
+                }
+                if (!dateModel) {
+                    res.render('attendance/attendance', {
+                        students: [], batch, error: "No attendance has been taken for this day", date: new Date(date)
+                    });
+                } else {
+                    const date = new Date(dateModel.date);
+                    StudentModel.find({
+                        created: { $lte: date },
+                        $or: [{ deleted: null }, { deleted: { $gt: date } }],
+                        batch,
+                    }, 'name attendance', { sort: { name: 1, created: 1 } }, (err, students) => {
+                        if (err) {
+                            console.log(err);
+                        }
+                        res.render('attendance/attendance', {
+                            students, batch, date
+                        });
+                    });
+                }
+            });
+        } else {
+            res.render('attendance/select_date', {
+                batch,
+                nextURL: "/view_attendance"
+            });
+        }
+    } else {
+        StudentModel.distinct('batch', { deleted: '' }, (err, batches) => {
+            if (err) {
+                console.log(err);
+            }
+            res.render('attendance/select_batch', {
+                batches,
+                nextURL: "/view_attendance"
+            });
+        });
+    }
+};
 
 module.exports = attendanceRoutes;

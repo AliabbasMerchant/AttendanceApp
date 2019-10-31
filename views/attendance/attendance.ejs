@@ -1,15 +1,16 @@
 <% include ../layouts/header %>
 
 <div class="container container-fluid mt-3 text-dark text-center">
-    <div class="heading-1 bold mb-3">Attendance</div>
+    <div class="heading-1 bold">Attendance</div>
+    <div class="heading-3 bold mb-3">Batch: <%= batch %></div>
     <% include ../layouts/messages %>
 
     <div class="d-flex justify-content-center">
         <form action="/attendance?batch=<%= batch %>" method="POST">
             <div class="row text-center d-flex flex-column">
-                <div class="form-group">
+                <div class="form-group mb-5">
                     <label class="required bold" for="date">Date</label>
-                    <input type="date" class="form-control" id="date-input" value="" min="2019-10-01" max="" name="date"
+                    <input type="date" class="form-control" id="date-input" value="" min="2019-11-01" max="" name="date"
                         required>
                 </div>
                 <div class="form-group">
@@ -22,19 +23,49 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <% if(students.length) { %>
                             <% let sr = 1; %>
                             <% students.forEach(student => { %>
                             <tr>
                                 <td scope="row"><%= sr %></td>
                                 <td scope="row"><%= student.name %></td>
-                                <td><input type="checkbox" name="students" value="<%= student.id %>"></td>
+                                <td>
+                                    <!-- Thanks to: https://stackoverflow.com/a/25764926/8068699 for the checkbox hack -->
+                                    <% if(typeof(student.attendance) == 'undefined') { %>
+                                    <!-- Take attendance -->
+                                    <input type="hidden" name="<%= student.id %>" value="absent"><input type="checkbox"
+                                        onclick="this.previousSibling.value=(this.previousSibling.value=='present')?'absent':'present'">
+                                    <% } else { %>
+                                    <!-- View attendance -->
+                                    <% let present = false;
+                                    for (let i = 0; i < student.attendance.length; i++) {
+                                        if(String(student.attendance[i].date) == String(date)) {
+                                            present = true;
+                                            break;
+                                        }
+                                    }
+                                    if (present) { %>
+                                    <input type="hidden" name="<%= student.id %>" value="present"><input type="checkbox"
+                                        onclick="this.previousSibling.value=(this.previousSibling.value=='present')?'absent':'present'" checked>
+                                    <% } else { %>
+                                    <input type="hidden" name="<%= student.id %>" value="absent"><input type="checkbox"
+                                        onclick="this.previousSibling.value=(this.previousSibling.value=='present')?'absent':'present'">
+                                    <% } %>
+                                    <% } %>
+                                </td>
                                 <% sr += 1 %>
                             </tr>
                             <% }); %>
+                            <% } else { %>
+                            <tr>
+                                <td colspan="3"><%= typeof(error) != 'undefined' ? error : 'No student found.' %></td>
+                            </tr>
+                            <% } %>
                         </tbody>
                     </table>
                 </div>
                 <button type="submit" class="btn btn-outline-danger pl-4 pr-4">Save</button>
+                <button class="btn btn-outline-success pl-4 pr-4 my-3" onclick="window.history.back()">Back</a>
             </div>
         </form>
     </div>
@@ -43,15 +74,18 @@
 <% include ../layouts/footer %>
 
 <script>
-    var dateString = "<%= typeof(dateString) != 'undefined' ? dateString : '' %>"
-    if (!dateString) {
-        var date = new Date();
-        dateString =
-            String(date.getFullYear()) + "-" +
-            String(date.getMonth() + 1) + "-" +
-            String(date.getDate());
-    }
+    var date = new Date("<%= typeof(date) != 'undefined' ? new Date(date) : new Date() %>");
     var dateInput = $('#date-input');
-    dateInput.attr("max", dateString);
+    var dateString =
+        String(date.getFullYear()) + "-" +
+        String(date.getMonth() + 1).padStart(2, '0') + "-" +
+        String(date.getDate()).padStart(2, '0');
     dateInput.attr("value", dateString);
+    dateInput.attr("max", dateString);
+    if ("<%= typeof(date) != 'undefined' ? 'true' : '' %>") {
+        // View Attendance - Dont allow to change the date
+        dateInput.attr("min", dateString);
+    } else {
+        // Take Attendance
+    }
 </script>

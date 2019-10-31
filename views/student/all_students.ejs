@@ -7,6 +7,7 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
+                    <th scope="col">Sr. No.</th>
                     <th scope="col">Name</th>
                     <th scope="col">Batch</th>
                     <th scope="col">Created</th>
@@ -15,12 +16,18 @@
             </thead>
             <tbody>
                 <% if (students.length != 0) { %>
+                <% let sr = 1; %>
+                <% let batch = ''; %>
                 <% students.forEach(student => { %>
                 <tr>
+                    <% if(batch != student.batch) { sr = 1; batch = student.batch; } %>
+                    <td scope="row"><%= sr %></td>
                     <td scope="row"><%= student.name %></td>
                     <td scope="row"><%= student.batch %></td>
                     <td scope="row" class="date"><%= student.created %></td>
                     <td scope="row" class="date"><%= student.deleted %></td>
+                    <% console.log(student.deleted) %>
+                    <% sr += 1 %>
                 </tr>
                 <% }); %>
                 <% } %>

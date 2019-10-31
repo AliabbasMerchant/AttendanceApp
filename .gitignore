@@ -1,5 +1,6 @@
 .vscode/*
 nodemon.json
+ejs_lint.js
 
 # Logs
 logs
