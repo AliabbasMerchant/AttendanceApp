@@ -1,4 +1,4 @@
-<% include ./layouts/header %>
+<% include ../layouts/header %>
 
 <div class="container mt-3 text-dark">
     <div class="row">
@@ -6,7 +6,7 @@
         <div class="col-md-10 col-lg-8 col-xl-6">
             <form action="/register" method="POST">
                 <div class="heading-2 text-center mt-3">ADMIN REGISTER</div>
-                <% include ./layouts/messages %>
+                <% include ../layouts/messages %>
                 <div class="form-group">
                     <label class="required" for="username">Username</label>
                     <input type="text" class="form-control" id="username" placeholder="Enter username" name="username" value="<%= typeof username != 'undefined' ? username : '' %>" required>
@@ -25,4 +25,4 @@
     </div>
 </div>
 
-<% include ./layouts/footer %>
+<% include ../layouts/footer %>

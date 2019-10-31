@@ -1,33 +1,27 @@
-const express = require('express');
-const auth = require('./config/auth');
 const passport = require('passport');
 const bcrypt = require('bcryptjs');
 
-const Admin = require('./models/admin');
+const Admin = require('../models/admin');
 
-const router = express.Router();
+let adminRoutes = {};
 
-router.get('/', (_req, res) => {
-    res.redirect('/login');
-});
+adminRoutes.loginGetRoute = (_req, res) => {
+    res.render('admin/login');
+};
 
-router.get('/login', (_req, res) => {
-    res.render('login');
-});
-
-router.post('/login', (req, res, next) => {
+adminRoutes.loginPostRoute = (req, res, next) => {
     passport.authenticate('admin-local', {
         successRedirect: '/home',
         failureRedirect: '/login',
         failureFlash: 'Invalid username or password'
     })(req, res, next);
-});
+};
 
-router.get('/register', auth.isAdminLoggedIn, (_req, res) => {
-    res.render('register');
-});
+adminRoutes.registerGetRoute = (_req, res) => {
+    res.render('admin/register');
+};
 
-router.post('/register', auth.isAdminLoggedIn, (req, res) => {
+adminRoutes.registerPostRoute = (req, res) => {
     const { username, password1, password2 } = req.body;
     let error = false;
     if (!username || !password1 || !password2) {
@@ -47,13 +41,13 @@ router.post('/register', auth.isAdminLoggedIn, (req, res) => {
         error = true;
     }
     if (error) {
-        res.render('register', { username, password1, password2 });
+        res.render('admin/register', { username, password1, password2 });
     } else {
         Admin.findOne({ username })
             .then(admin => {
                 if (admin) {
                     req.flash('error_msgs', 'This username has already been registered');
-                    res.render('register', { password1, password2 });
+                    res.render('admin/register', { password1, password2 });
                 } else {
                     const newAdmin = new Admin({ username, password: password1 });
                     bcrypt.genSalt(Number(process.env.SECRET_NUMBER), (err, salt) => {
@@ -71,50 +65,21 @@ router.post('/register', auth.isAdminLoggedIn, (req, res) => {
                 }
             });
     };
-});
+};
 
-router.get('/logout', auth.isAdminLoggedIn, (req, res) => {
+adminRoutes.logoutGetRoute = (req, res) => {
     req.logout();
     req.flash('success_msgs', 'Successfully logged out');
     res.redirect('/');
-});
+};
 
-router.get('/home', auth.isAdminLoggedIn, (req, res) => {
+adminRoutes.homeGetRoute = (req, res) => {
     /*
     Links to:
         Users page (View, add, edit)
         Attendance
     */
     res.send('HOME PAGE');
-});
+};
 
-router.get('/students', (req, res) => {
-    /*
-    Table of students
-    Options to add, edit and remove
-    Link to all students (past also)
-    */
-    res.render('students');
-});
-
-router.get('/students/all', auth.isAdminLoggedIn, (req, res) => {
-    /*
-    Table of all students
-    */
-    res.send('ALL STUDENTS PAGE');
-});
-
-router.get('/attendance', auth.isAdminLoggedIn, (req, res) => {
-    /*
-    Date option
-    List of users
-    Save button
-    */
-    res.send('HOME PAGE');
-});
-
-router.get('*', (_req, res) => {
-    res.redirect('/')
-});
-
-module.exports = router;
+module.exports = adminRoutes;

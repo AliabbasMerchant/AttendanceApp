@@ -1,0 +1,33 @@
+<% include ../layouts/header %>
+
+<div class="container container-fluid mt-3 text-dark text-center">
+    <div class="heading-1 bold mb-3">All Students</div>
+    <% include ../layouts/messages %>
+    <div class="row text-center">
+        <div class="table-responsive mx-auto"></div>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Batch</th>
+                    <th scope="col">Created</th>
+                    <th scope="col">Deleted</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (students.length != 0) { %>
+                <% students.forEach(student => { %>
+                <tr>
+                    <td scope="row"><%= student.name %></td>
+                    <td scope="row"><%= student.batch %></td>
+                    <td scope="row" class="date"><%= student.created %></td>
+                    <td scope="row" class="date"><%= student.deleted %></td>
+                </tr>
+                <% }); %>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<% include ../layouts/footer %>
