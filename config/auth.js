@@ -1,9 +1,6 @@
 const auth = {
     isAdminLoggedIn: (req, res, next) => {
-        if (process.env.DEVELOPER) {
-            return next();
-        }
-        if (req.isAuthenticated()) {
+        if (req.isAuthenticated() || process.env.DEVELOPER) {
             return next();
         }
         req.flash('error_msgs', 'Please log in to access this page');

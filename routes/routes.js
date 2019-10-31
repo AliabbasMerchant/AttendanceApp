@@ -35,6 +35,10 @@ router.get('/attendance', auth.isAdminLoggedIn, attendanceRoutes.attendanceGetRo
 
 router.post('/attendance', auth.isAdminLoggedIn, attendanceRoutes.attendancePostRoute);
 
+if(process.env.DEVELOPER) {
+    router.use('/dev', require('./developer'));
+}
+
 router.get('*', (_req, res) => {
     res.redirect('/')
 });

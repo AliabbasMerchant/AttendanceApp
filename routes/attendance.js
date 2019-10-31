@@ -1,4 +1,3 @@
-const AdminModel = require('../models/admin');
 const StudentModel = require('../models/student');
 const DateModel = require('../models/date');
 
