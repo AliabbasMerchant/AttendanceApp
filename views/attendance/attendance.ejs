@@ -1,13 +1,57 @@
 <% include ../layouts/header %>
 
-<div class="container mt-3 text-dark">
-    <div class="row">
-        <div class="col-md-1 col-lg-2 col-xl-3"></div>
-        <div class="col-md-10 col-lg-8 col-xl-6 d-flex flex-column align-items-center justify-content-around">
-            <% include ../layouts/messages %>
-        </div>
-        <div class="col-md-1 col-lg-2 col-xl-3"></div>
+<div class="container container-fluid mt-3 text-dark text-center">
+    <div class="heading-1 bold mb-3">Attendance</div>
+    <% include ../layouts/messages %>
+
+    <div class="d-flex justify-content-center">
+        <form action="/attendance?batch=<%= batch %>" method="POST">
+            <div class="row text-center d-flex flex-column">
+                <div class="form-group">
+                    <label class="required bold" for="date">Date</label>
+                    <input type="date" class="form-control" id="date-input" value="" min="2019-10-01" max="" name="date"
+                        required>
+                </div>
+                <div class="form-group">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Sr. No.</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Present</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% let sr = 1; %>
+                            <% students.forEach(student => { %>
+                            <tr>
+                                <td scope="row"><%= sr %></td>
+                                <td scope="row"><%= student.name %></td>
+                                <td><input type="checkbox" name="students" value="<%= student.id %>"></td>
+                                <% sr += 1 %>
+                            </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+                <button type="submit" class="btn btn-outline-danger pl-4 pr-4">Save</button>
+            </div>
+        </form>
     </div>
 </div>
 
 <% include ../layouts/footer %>
+
+<script>
+    var dateString = "<%= typeof(dateString) != 'undefined' ? dateString : '' %>"
+    if (!dateString) {
+        var date = new Date();
+        dateString =
+            String(date.getFullYear()) + "-" +
+            String(date.getMonth() + 1) + "-" +
+            String(date.getDate());
+    }
+    var dateInput = $('#date-input');
+    dateInput.attr("max", dateString);
+    dateInput.attr("value", dateString);
+</script>

@@ -43,7 +43,7 @@ studentRoutes.modifyStudentPostRoute = (req, res) => {
                 req.flash('success_msgs', 'Added New Student!');
                 res.redirect('/students');
             })
-            .catch(err => console.log(err));;
+            .catch(err => console.log(err));
     } else {
         let update;
         if (!batch) {

@@ -15,23 +15,25 @@ router.get('/login', adminRoutes.loginGetRoute);
 
 router.post('/login', adminRoutes.loginPostRoute);
 
-router.get('/register', adminRoutes.registerGetRoute);
+router.get('/register', auth.isAdminLoggedIn, adminRoutes.registerGetRoute);
 
-router.post('/register', adminRoutes.registerPostRoute);
+router.post('/register', auth.isAdminLoggedIn, adminRoutes.registerPostRoute);
 
-router.get('/logout', adminRoutes.logoutGetRoute);
+router.get('/logout', auth.isAdminLoggedIn, adminRoutes.logoutGetRoute);
 
-router.get('/home', adminRoutes.homeGetRoute);
+router.get('/home', auth.isAdminLoggedIn, adminRoutes.homeGetRoute);
 
-router.get('/students', studentRoutes.studentsGetRoute);
+router.get('/students', auth.isAdminLoggedIn, studentRoutes.studentsGetRoute);
 
-router.get('/all_students', studentRoutes.allStudentsGetRoute);
+router.get('/all_students', auth.isAdminLoggedIn, studentRoutes.allStudentsGetRoute);
 
-router.post('/modify_student', studentRoutes.modifyStudentPostRoute);
+router.post('/modify_student', auth.isAdminLoggedIn, studentRoutes.modifyStudentPostRoute);
 
-router.get('/delete_student/:id', studentRoutes.deleteStudentGetRoute);
+router.get('/delete_student/:id', auth.isAdminLoggedIn, studentRoutes.deleteStudentGetRoute);
 
-router.get('/attendance', attendanceRoutes.attendanceGetRoute);
+router.get('/attendance', auth.isAdminLoggedIn, attendanceRoutes.attendanceGetRoute);
+
+router.post('/attendance', auth.isAdminLoggedIn, attendanceRoutes.attendancePostRoute);
 
 router.get('*', (_req, res) => {
     res.redirect('/')

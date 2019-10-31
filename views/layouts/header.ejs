@@ -11,21 +11,28 @@
 
 <body>
     <div class="custom-navbar d-flex align-items-center bg-custom">
-        <img class="" width="100px" height="100px" src="/assets/logo.png"></img>
+        <% if (user) { %>
+        <a href="/home"><img class="" width="100px" height="100px" src="/assets/logo.png"></img></a>
+        <% } else { %>
+        <a href="/login"><img class="" width="100px" height="100px" src="/assets/logo.png"></img></a>
+        <% } %>
         <nav class="navbar navbar-expand-lg navbar-light bg-custom" height="100px">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation bar">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse ml-auto" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <div class="dark-gray heading-1 bold">Attendance App</div>
+                <ul class="navbar-nav mr-auto d-flex align-items-end">
+                    <a class="nav-link dark-gray bold mr-2 heading-2" href="">Attendance App</a>
+                    <a class="nav-link dark-gray bold mr-2 heading-3" href="/home">Home</a>
+                    <a class="nav-link dark-gray bold mr-2 heading-3" href="/students">Students</a>
+                    <a class="nav-link dark-gray bold mr-2 heading-3" href="/attendance">Attendance</a>
+                    <a class="nav-link dark-gray bold mr-2 heading-3" href="/stats">Stats</a>
                 </ul>
 
                 <ul class="navbar-nav  ml-auto">
                     <% if (user) { %>
-                    <a class="nav-link dark-gray" href="#"><%= user.username %></a>
-                    <a class="nav-link dark-gray" href="/logout">Logout</a>
+                    <a class="nav-link dark-gray" href="/logout"><%= user.username %> Logout</a>
                     <% } %>
                 </ul>
             </div>
