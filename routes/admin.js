@@ -74,12 +74,7 @@ adminRoutes.logoutGetRoute = (req, res) => {
 };
 
 adminRoutes.homeGetRoute = (req, res) => {
-    /*
-    Links to:
-        Users page (View, add, edit)
-        Attendance
-    */
-    res.send('HOME PAGE');
+    res.render('admin/home');
 };
 
 module.exports = adminRoutes;

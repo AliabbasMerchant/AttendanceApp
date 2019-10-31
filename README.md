@@ -24,5 +24,7 @@ Lets see how fast I can copy pasta and build a working system, according to the 
 Lets begin!
 
 ### Updates
-31/10/19 00:09: Have hacked for approx 03:20 hours
-31/10/19 10:30: Lets start hacked again!
+30/10/19 20:30: Lets start hacking!
+31/10/19 00:09: Hacked for approx 03:20 hours
+31/10/19 10:30: Lets start hacking again!
+31/10/19 13:10: Hacked for approx 02:10 hours

@@ -3,6 +3,7 @@ const auth = require('../config/auth');
 
 const adminRoutes = require('./admin');
 const studentRoutes = require('./student');
+const attendanceRoutes = require('./attendance');
 
 const router = express.Router();
 
@@ -30,15 +31,7 @@ router.post('/modify_student', studentRoutes.modifyStudentPostRoute);
 
 router.get('/delete_student/:id', studentRoutes.deleteStudentGetRoute);
 
-// TODO: Where should this go?
-router.get('/attendance', (req, res) => {
-    /*
-    Date option
-    List of users
-    Save button
-    */
-    res.send('HOME PAGE');
-});
+router.get('/attendance', attendanceRoutes.attendanceGetRoute);
 
 router.get('*', (_req, res) => {
     res.redirect('/')

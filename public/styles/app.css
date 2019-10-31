@@ -98,3 +98,7 @@
     content: ' *';
     display: inline;
 }
+
+.bg-custom {
+    background-color: #999999;
+}
