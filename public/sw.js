@@ -1,6 +1,5 @@
 var cacheName = 'attendance-pwa';
 var filesToCache = [
-  '/login',
   '/assets/logo.png',
   '/stlyes/app.css',
   '/scripts/date.css',
