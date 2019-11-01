@@ -3,7 +3,7 @@ const BatchModel = require('../models/batch');
 let batchRoutes = {};
 
 batchRoutes.batchesGetRoute = (_req, res) => {
-    BatchModel.find({}, "name", { sort: { name: 1 } }, (err, batches) => {
+    BatchModel.find({}, 'name', { sort: { name: 1 } }, (err, batches) => {
         if (err) {
             console.log(err);
         }

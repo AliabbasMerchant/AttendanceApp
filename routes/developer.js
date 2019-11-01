@@ -104,7 +104,7 @@ router.get('/clear', (_req, res) => {
     BatchModel.deleteMany({}, (err) => {
         if(err) res.send(err);
     });
-    res.send("");
+    res.send('');
 });
 
 router.get('*', (_req, res) => {

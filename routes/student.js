@@ -9,7 +9,7 @@ studentRoutes.studentsGetRoute = (req, res) => {
         if (err) console.log(err);
         if (batches.length) {
             if (batch) {
-                StudentModel.find({ deleted: '', batch }, "name batch", { sort: { batch: 1, name: 1, created: 1 } }, (err, students) => {
+                StudentModel.find({ deleted: '', batch }, 'name batch', { sort: { batch: 1, name: 1, created: 1 } }, (err, students) => {
                     if (err) {
                         console.log(err);
                     }
@@ -18,7 +18,7 @@ studentRoutes.studentsGetRoute = (req, res) => {
                     });
                 });
             } else {
-                StudentModel.find({ deleted: '' }, "name batch", { sort: { batch: 1, name: 1, created: 1 } }, (err, students) => {
+                StudentModel.find({ deleted: '' }, 'name batch', { sort: { batch: 1, name: 1, created: 1 } }, (err, students) => {
                     if (err) {
                         console.log(err);
                     }
@@ -34,15 +34,27 @@ studentRoutes.studentsGetRoute = (req, res) => {
     });
 };
 
-studentRoutes.allStudentsGetRoute = (_req, res) => {
-    StudentModel.find({}, "name batch created deleted", { sort: { batch: 1, name: 1, created: 1 } }, (err, students) => {
-        if (err) {
-            console.log(err);
-        }
-        res.render('student/all_students', {
-            students
+studentRoutes.allStudentsGetRoute = (req, res) => {
+    let batch = req.query.batch;
+    if (batch) {
+        StudentModel.find({ batch }, 'name batch created deleted', { sort: { batch: 1, name: 1, created: 1 } }, (err, students) => {
+            if (err) {
+                console.log(err);
+            }
+            res.render('student/all_students', {
+                students
+            });
         });
-    });
+    } else {
+        StudentModel.find({}, 'name batch created deleted', { sort: { batch: 1, name: 1, created: 1 } }, (err, students) => {
+            if (err) {
+                console.log(err);
+            }
+            res.render('student/all_students', {
+                students
+            });
+        });
+    }
 };
 
 studentRoutes.modifyStudentPostRoute = (req, res) => {
@@ -53,8 +65,7 @@ studentRoutes.modifyStudentPostRoute = (req, res) => {
         return;
     }
     if (!id) { // create new student
-        const created = new Date();
-        created.setUTCHours(0, 0, 0, 0);
+        const created = new Date((new Date()).setUTCHours(0,0,0,0));
         const newStudentModel = new StudentModel({ name, batch, created });
         newStudentModel.save()
             .then(_student => {
@@ -80,8 +91,7 @@ studentRoutes.deleteStudentGetRoute = (req, res) => {
         res.redirect('/students');
         return;
     }
-    const deleted = new Date();
-    deleted.setUTCHours(0, 0, 0, 0);
+    const deleted = new Date((new Date()).setUTCHours(0,0,0,0));
     StudentModel.findOneAndUpdate({ _id: req.params.id }, { $set: { deleted } }, { new: true, upsert: false }, (err, _student) => {
         if (err) {
             console.log(err);

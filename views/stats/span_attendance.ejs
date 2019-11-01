@@ -1,0 +1,71 @@
+<% include ../layouts/header %>
+
+<div class="container mt-3 text-dark">
+    <div class="row">
+        <div class="col-md-1 col-lg-2 col-xl-3"></div>
+        <div class="col-md-10 col-lg-8 col-xl-6 d-flex flex-column align-items-center justify-content-around">
+            <% include ../layouts/messages %>
+            <div class="col-lg-9">
+                <div class="heading-3">Batch: <span class="para-1 mb-4"><%= batch %></span></div>
+                <div class="heading-3">Start Date: <span class="para-1 mb-4 date"><%= startDate %></span></div>
+                <div class="heading-3">End Date: <span class="para-1 mb-4 date"><%= endDate %></span></div>
+                <div class="heading-3">Total Number of Days: <span class="para-1 mb-4"><%= dates.length %></span></div>
+            </div>
+            <% let sr = 0; %>
+            <table class="table mt-4">
+                <thead>
+                    <tr>
+                        <th scope="col">Sr. No.</th>
+                        <th scope="col">Name</th>
+                        <% dates.forEach(date => { %>
+                        <th scope="col" class="date"><%= date %></th>
+                        <% }); %>
+                        <th scope="col">Attendance</th>
+                        <th scope="col">Percentage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (students.length) { %>
+                    <% students.forEach(student => { sr ++; %>
+                    <tr>
+                        <td scope="col"><%= sr %></td>
+                        <td scope="col"><%= student.name %></td>
+
+                        <% let present = 0; let total = 0;
+                        dates.forEach(date => {
+                            let status = ABSENT;
+                            let created = new Date(student.created);
+                            let deleted = new Date(student.deleted);
+                            date = new Date(date);
+                            if((date < created) || (date >= deleted)) {
+                                status = '';
+                            } else {
+                                total += 1;
+                                for (let i = 0; i < student.attendance.length; i++) {
+                                    if(student.attendance[i] == String(date)) {
+                                        status = PRESENT;
+                                        present += 1;
+                                        break;
+                                    }
+                                }
+                            } %>
+                            <td scope="col"><%= status %></td>
+                        <% }); %>
+
+                        <td scope="col"><%= present %></td>
+                        <td scope="col"><%= Math.round(present/total * 100 * 100) / 100 %> %</td>
+                    </tr>
+                    <% }); %>
+                    <% } else { %>
+                    <tr>
+                        <td colspan="<%= dates.length + 4 %>" class="text-center"><%= error %></td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-1 col-lg-2 col-xl-3"></div>
+    </div>
+</div>
+
+<% include ../layouts/footer %>

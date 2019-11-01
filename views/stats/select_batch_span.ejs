@@ -1,0 +1,58 @@
+<% include ../layouts/header %>
+
+<div class="container mt-3 text-dark">
+    <div class="row">
+        <div class="col-md-1 col-lg-2 col-xl-3"></div>
+        <div class="col-md-10 col-lg-8 col-xl-6 d-flex flex-column align-items-center justify-content-around">
+            <% include ../layouts/messages %>
+            <div class="my-3 heading-3 bold">Select Batch and Span</div>
+            <form action="<%= nextURL %>" method="GET">
+                <div class="row text-center d-flex flex-column">
+                    <div class="form-group">
+                        <label class="required bold" for="batch">Batch</label>
+                        <select name="batch" class="form-control" id="batch-input" required>
+                            <% batches.forEach(batch => { %>
+                            <option value="<%= batch.name %>"><%= batch.name %></option>
+                            <% }); %>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="required bold" for="date">Start Date</label>
+                        <input type="date" class="form-control" id="start-date-input" value="" min="" max=""
+                            name="startDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="required bold" for="date">End Date</label>
+                        <input type="date" class="form-control" id="end-date-input" value="" min="" max=""
+                            name="endDate" required>
+                    </div>
+                    <button type="submit" class="btn btn-outline-danger pl-4 pr-4">Go!</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-1 col-lg-2 col-xl-3"></div>
+    </div>
+</div>
+
+<% include ../layouts/footer %>
+
+<script>
+    var todayDate = new Date((new Date()).setUTCHours(0,0,0,0));
+    var todayDateString =
+        String(todayDate.getFullYear()) + '-' +
+        String(todayDate.getMonth() + 1).padStart(2, '0') + '-' +
+        String(todayDate.getDate()).padStart(2, '0');
+    var minDate = new Date((new Date("<%= MIN_DATE %>")).setUTCHours(0,0,0,0));
+    var minDateString =
+        String(minDate.getFullYear()) + '-' +
+        String(minDate.getMonth() + 1).padStart(2, '0') + '-' +
+        String(minDate.getDate()).padStart(2, '0');
+    var startDateInput = $('#start-date-input');
+    var endDateInput = $('#end-date-input');
+    startDateInput.attr("value", minDateString);
+    startDateInput.attr("max", todayDateString);
+    startDateInput.attr("min", minDateString);
+    endDateInput.attr("value", todayDateString);
+    endDateInput.attr("max", todayDateString);
+    endDateInput.attr("min", minDateString);
+</script>

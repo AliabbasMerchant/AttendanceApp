@@ -2,29 +2,34 @@ const StudentModel = require('../models/student');
 const DateModel = require('../models/date');
 const BatchModel = require('../models/batch');
 
+const constants = require('../config/constants');
+
 let attendanceRoutes = {};
 
 attendanceRoutes.attendanceGetRoute = (req, res) => {
-    let batch = req.query.batch;
-    if (batch) {
+    const batch = req.query.batch;
+    const date = req.query.date;
+    if (batch ^ date) { // only 1 is present
+        req.flash('error_msgs', 'Please fill in all required fields');
+    }
+    if (!batch || !date) {
+        BatchModel.find({}, 'name', { sort: { name: 1 } }, (err, batches) => {
+            if (err) {
+                console.log(err);
+            }
+            res.render('attendance/select_batch_date', {
+                nextURL: '/attendance',
+                batches,
+            });
+        });
+        return;
+    } else {
         StudentModel.find({ deleted: '', batch }, 'name', { sort: { name: 1, created: 1 } }, (err, students) => {
             if (err) {
                 console.log(err);
             }
             res.render('attendance/attendance', {
-                students, batch
-            });
-        });
-    } else {
-        BatchModel.find({}, "name", { sort: { name: 1 } }, (err, batches) => {
-            if (err) {
-                console.log(err);
-            } else {
-                batches = batches.map(batch => batch.name);
-            }
-            res.render('attendance/select_batch', {
-                batches,
-                nextURL: "/attendance"
+                students, batch, date, error: 'No student found'
             });
         });
     }
@@ -36,14 +41,13 @@ attendanceRoutes.attendancePostRoute = (req, res) => {
         res.redirect('/attendance');
         return;
     }
-    if (!req.body.date) {
+    if (!req.query.date) {
         req.flash('error_msgs', 'Please fill in all required fields');
-        res.redirect('/attendance?batch=' + req.query.batch);
+        res.redirect('/attendance');
         return;
     }
     const batch = req.query.batch;
-    const date = new Date(req.body.date);
-    delete req.body.date;
+    const date = new Date((new Date(req.query.date)).setUTCHours(0,0,0,0));
     const students = req.body;
     const adminName = req.user ? req.user.username : process.env.DEVELOPER;
     // Should never happen. req.user is always defined, as the admin-logged-in guard is always on, except in dev mode
@@ -52,31 +56,30 @@ attendanceRoutes.attendancePostRoute = (req, res) => {
         if (err) {
             console.log(err);
             req.flash('error_msgs', 'Error saving data');
-            res.redirect('/attendance?batch=' + batch);
-        }
-        else {
+            res.redirect('/attendance');
+        } else {
             let left = Object.keys(students).length;
             let error = false;
             for (const student_id in students) {
-                const present = students[student_id] == "present";
+                const present = students[student_id] == constants.PRESENT;
                 StudentModel.findById(student_id, (err, student) => {
                     if (err) {
                         console.log(err);
                         req.flash('error_msgs', 'Failed to find a student!');
                         error = true;
                         left--;
-                    }
-                    else {
+                    } else {
                         let found = false;
                         // this filtering is happening in memory. Not in the DB
-                        student.attendance = student.attendance.filter((obj, _index, _arr) => {
+                        let att = student.attendance.filter((obj, _index, _arr) => {
                             if (String(obj.date) == String(date)) found = true;
                             return String(obj.date) != String(date);
                         });
                         if (present && found) {
                             left--;
                         } else if (present && !found) {
-                            student.attendance.push({ date });
+                            att.push({ date });
+                            student.attendance = att;
                             student.save((err, _student) => {
                                 if (err) {
                                     console.log(err);
@@ -86,6 +89,7 @@ attendanceRoutes.attendancePostRoute = (req, res) => {
                                 left--;
                             });
                         } else if (!present && found) {
+                            student.attendance = att;
                             student.save((err, _student) => {
                                 if (err) {
                                     console.log(err);
@@ -100,9 +104,9 @@ attendanceRoutes.attendancePostRoute = (req, res) => {
                     }
                 });
             }
-            var _flagCheck = setInterval(() => {
+            var _leftCheck = setInterval(() => {
                 if (!left) {
-                    clearInterval(_flagCheck);
+                    clearInterval(_leftCheck);
                     if (!error) req.flash('success_msgs', 'Attendance saved!');
                     res.redirect('/home');
                 }
@@ -118,37 +122,37 @@ attendanceRoutes.viewAttendanceGetRoute = (req, res) => {
         req.flash('error_msgs', 'Please fill in all required fields');
     }
     if (!batch || !date) {
-        BatchModel.find({}, "name", { sort: { name: 1 } }, (err, batches) => {
+        BatchModel.find({}, 'name', { sort: { name: 1 } }, (err, batches) => {
             if (err) {
                 console.log(err);
             }
-            res.render('attendance/select_branch_date', {
-                nextURL: "/view_attendance",
-                batches
+            res.render('attendance/select_batch_date', {
+                nextURL: '/view_attendance',
+                batches,
             });
         });
         return;
     }
-    DateModel.findOne({ date, batch }, null, {}, (err, dateModel) => {
+    DateModel.findOne({ date: new Date((new Date(date)).setUTCHours(0,0,0,0)), batch }, null, {}, (err, dateModel) => {
         if (err) {
             console.log(err);
         }
         if (!dateModel) {
             res.render('attendance/attendance', {
-                students: [], batch, error: "No attendance has been taken for this day", date: new Date(date)
+                students: [], batch, date: new Date((new Date(date)).setUTCHours(0,0,0,0)), error: 'No attendance has been taken for this day'
             });
         } else {
-            const date = new Date(dateModel.date);
+            const date = new Date((new Date(dateModel.date)).setUTCHours(0,0,0,0));
             StudentModel.find({
                 created: { $lte: date },
                 $or: [{ deleted: null }, { deleted: { $gt: date } }],
                 batch,
-            }, 'name attendance', { sort: { name: 1, created: 1 } }, (err, students) => {
+            }, 'name attendance created', { sort: { name: 1, created: 1 } }, (err, students) => {
                 if (err) {
                     console.log(err);
                 }
                 res.render('attendance/attendance', {
-                    students, batch, date
+                    students, batch, date, error: 'No student found'
                 });
             });
         }

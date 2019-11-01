@@ -5,12 +5,11 @@ const adminRoutes = require('./admin');
 const studentRoutes = require('./student');
 const batchRoutes = require('./batch');
 const attendanceRoutes = require('./attendance');
+const statsRoutes = require('./stats');
 
 const router = express.Router();
 
-router.get('/', (_req, res) => {
-    res.redirect('/login');
-});
+router.get('/', auth.isAdminLoggedIn, adminRoutes.homeGetRoute);
 
 router.get('/login', adminRoutes.loginGetRoute);
 
@@ -42,7 +41,12 @@ router.get('/attendance', auth.isAdminLoggedIn, attendanceRoutes.attendanceGetRo
 
 router.post('/attendance', auth.isAdminLoggedIn, attendanceRoutes.attendancePostRoute);
 
+// This involves editing also, so it is placed in attendanceRoutes
 router.get('/view_attendance', auth.isAdminLoggedIn, attendanceRoutes.viewAttendanceGetRoute);
+
+router.get('/view_span_attendance', auth.isAdminLoggedIn, statsRoutes.viewSpanAttendanceGetRoute);
+
+router.get('/view_student', auth.isAdminLoggedIn, statsRoutes.viewStudentGetRoute);
 
 if(process.env.DEVELOPER) {
     router.use('/dev', require('./developer'));

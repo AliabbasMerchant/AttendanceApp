@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
+const constants = require('./config/constants');
 
 require('./config/passport')(passport);
 
@@ -37,6 +38,9 @@ app.use(flash());
 
 app.use((req, res, next) => {
     res.locals.user = req.user;
+    res.locals.PRESENT = constants.PRESENT;
+    res.locals.ABSENT = constants.ABSENT;
+    res.locals.MIN_DATE = constants.MIN_DATE;
     res.locals.success_msgs = req.flash('success_msgs');
     res.locals.error_msgs = req.flash('error_msgs');
     next();

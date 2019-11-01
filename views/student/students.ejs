@@ -10,7 +10,7 @@
         data-id=""><span>&#x2b;</span> Add Student</button>
 
     <div class="row text-center">
-        <table class="table table-bordered">
+        <table class="table">
             <thead>
                 <tr>
                     <th scope="col">Sr. No.</th>
@@ -27,7 +27,7 @@
                 <tr>
                     <% if(batch != student.batch) { sr = 1; batch = student.batch; } %>
                     <td scope="row"><%= sr %></td>
-                    <td scope="row"><%= student.name %></td>
+                    <td scope="row"><a href="/view_student?id=<%= student._id %>"><%= student.name %></a></td>
                     <td scope="row"><%= student.batch %></td>
                     <td scope="row"><span class="glyphicon" style="cursor: pointer;" data-toggle="modal"
                             data-target="#studentModal" data-name="<%= student.name %>"
@@ -62,7 +62,7 @@
                             <select name="batch" class="form-control batch_input" required>
                                 <% batches.forEach(batch => { %>
                                 <option value="<%= batch.name %>"><%= batch.name %></option>
-                                <% } %>
+                                <% }); %>
                             </select>
                         </div>
                         <input type="text" class="form-control id_input" name="id" hidden>

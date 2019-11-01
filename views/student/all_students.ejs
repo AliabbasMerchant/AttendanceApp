@@ -4,7 +4,7 @@
     <div class="heading-1 bold mb-3">All Students</div>
     <% include ../layouts/messages %>
     <div class="row text-center">
-        <table class="table table-bordered">
+        <table class="table">
             <thead>
                 <tr>
                     <th scope="col">Sr. No.</th>
@@ -22,7 +22,7 @@
                 <tr>
                     <% if(batch != student.batch) { sr = 1; batch = student.batch; } %>
                     <td scope="row"><%= sr %></td>
-                    <td scope="row"><%= student.name %></td>
+                    <td scope="row"><a href="/view_student?id=<%= student._id %>"><%= student.name %></a></td>
                     <td scope="row"><%= student.batch %></td>
                     <td scope="row" class="date"><%= student.created %></td>
                     <td scope="row" class="date"><%= student.deleted %></td>

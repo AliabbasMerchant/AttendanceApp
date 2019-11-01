@@ -70,7 +70,7 @@ adminRoutes.registerPostRoute = (req, res) => {
 adminRoutes.logoutGetRoute = (req, res) => {
     req.logout();
     req.flash('success_msgs', 'Successfully logged out');
-    res.redirect('/');
+    res.redirect('login');
 };
 
 adminRoutes.homeGetRoute = (req, res) => {

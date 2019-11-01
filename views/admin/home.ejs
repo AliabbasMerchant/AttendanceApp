@@ -5,13 +5,14 @@
         <div class="col-md-1 col-lg-2 col-xl-3"></div>
         <div class="col-md-10 col-lg-8 col-xl-6 d-flex flex-column align-items-center justify-content-around">
             <% include ../layouts/messages %>
+            <a type="button" class="btn btn-danger my-3" href="/batches">Batches</a>
             <a type="button" class="btn btn-primary my-3" href="/students">Students</a>
             <a type="button" class="btn btn-secondary my-3" href="/all_students">All Students</a>
-            <a type="button" class="btn btn-primary my-3" href="/batches">Batches</a>
             <a type="button" class="btn btn-success my-3" href="/attendance">Take Attendance</a>
-            <a type="button" class="btn btn-success my-3" href="/view_attendance">View Attendance</a>
-            <a type="button" class="btn btn-warning my-3" href="/stats">Stats</a>
-
+            <a type="button" class="btn btn-warning my-3" href="/view_attendance">View A Date's Attendance (for a batch)</a>
+            <a type="button" class="btn btn-warning my-3" href="/view_span_attendance">View A Span of Days' Attendance (for a batch)</a>
+            <a type="button" class="btn btn-warning my-3" href="/all_students">View A Student</a>
+            <!-- <a type="button" class="btn btn-warning my-3" href="/view_batch">View A Batch's Attendance</a> -->
             <% if (user) { %>
                 <a type="button" class="btn btn-dark my-3" href="/logout"><%= user.username %> Logout</a>
             <% } %>

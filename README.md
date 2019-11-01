@@ -33,7 +33,13 @@ Lets begin!
 31/10/19 20:05: Lets start hacking again!  
 01/11/19 00:25: Hacked for approx 04:00 hours  
 01/11/19 08:00: Lets start hacking again!  
+01/11/19 12:00: Hacked for approx 03:00 hours  
+01/11/19 16:40: Lets start hacking again!  
+01/11/19 19:40: Hacked for approx 03:00 hours  
+01/11/19 21:00: Lets start hacking again!  
+01/11/19 22:00: Hacked for approx 01:00 hours  
 
 ## Notes
 * Dont delete a student on the last day. Delete it on the next day.
 * Add users the first day they attend class. Not before that. Otherwise they will be marked absent
+* If checking for a span, attendance of every student present in that span is shown, even if they have joined/left midway
