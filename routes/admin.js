@@ -1,7 +1,7 @@
 const passport = require('passport');
 const bcrypt = require('bcryptjs');
 
-const Admin = require('../models/admin');
+const AdminModel = require('../models/admin');
 
 let adminRoutes = {};
 
@@ -43,18 +43,18 @@ adminRoutes.registerPostRoute = (req, res) => {
     if (error) {
         res.render('admin/register', { username, password1, password2 });
     } else {
-        Admin.findOne({ username })
+        AdminModel.findOne({ username })
             .then(admin => {
                 if (admin) {
                     req.flash('error_msgs', 'This username has already been registered');
                     res.render('admin/register', { password1, password2 });
                 } else {
-                    const newAdmin = new Admin({ username, password: password1 });
+                    const newAdminModel = new AdminModel({ username, password: password1 });
                     bcrypt.genSalt(Number(process.env.SECRET_NUMBER), (err, salt) => {
-                        bcrypt.hash(newAdmin.password, salt, (err, hash) => {
+                        bcrypt.hash(newAdminModel.password, salt, (err, hash) => {
                             if (err) { throw err; }
-                            newAdmin.password = hash;
-                            newAdmin.save()
+                            newAdminModel.password = hash;
+                            newAdminModel.save()
                                 .then(_admin => {
                                     req.flash('success_msgs', 'Successfully registered!');
                                     res.redirect('/login');

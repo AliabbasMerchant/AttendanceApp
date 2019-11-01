@@ -1,5 +1,6 @@
 const StudentModel = require('../models/student');
 const DateModel = require('../models/date');
+const BatchModel = require('../models/batch');
 
 let attendanceRoutes = {};
 
@@ -15,9 +16,11 @@ attendanceRoutes.attendanceGetRoute = (req, res) => {
             });
         });
     } else {
-        StudentModel.distinct('batch', { deleted: '' }, (err, batches) => {
+        BatchModel.find({}, "name", { sort: { name: 1 } }, (err, batches) => {
             if (err) {
                 console.log(err);
+            } else {
+                batches = batches.map(batch => batch.name);
             }
             res.render('attendance/select_batch', {
                 batches,
@@ -67,12 +70,12 @@ attendanceRoutes.attendancePostRoute = (req, res) => {
                         let found = false;
                         // this filtering is happening in memory. Not in the DB
                         student.attendance = student.attendance.filter((obj, _index, _arr) => {
-                            if(String(obj.date) == String(date)) found = true;
+                            if (String(obj.date) == String(date)) found = true;
                             return String(obj.date) != String(date);
                         });
                         if (present && found) {
                             left--;
-                        } else if(present && !found) {
+                        } else if (present && !found) {
                             student.attendance.push({ date });
                             student.save((err, _student) => {
                                 if (err) {
@@ -82,7 +85,7 @@ attendanceRoutes.attendancePostRoute = (req, res) => {
                                 }
                                 left--;
                             });
-                        } else if(!present && found) {
+                        } else if (!present && found) {
                             student.save((err, _student) => {
                                 if (err) {
                                     console.log(err);
@@ -111,49 +114,45 @@ attendanceRoutes.attendancePostRoute = (req, res) => {
 attendanceRoutes.viewAttendanceGetRoute = (req, res) => {
     const batch = req.query.batch;
     const date = req.query.date;
-    if (batch) {
-        if (date) {
-            DateModel.findOne({ date, batch }, null, {}, (err, dateModel) => {
-                if (err) {
-                    console.log(err);
-                }
-                if (!dateModel) {
-                    res.render('attendance/attendance', {
-                        students: [], batch, error: "No attendance has been taken for this day", date: new Date(date)
-                    });
-                } else {
-                    const date = new Date(dateModel.date);
-                    StudentModel.find({
-                        created: { $lte: date },
-                        $or: [{ deleted: null }, { deleted: { $gt: date } }],
-                        batch,
-                    }, 'name attendance', { sort: { name: 1, created: 1 } }, (err, students) => {
-                        if (err) {
-                            console.log(err);
-                        }
-                        res.render('attendance/attendance', {
-                            students, batch, date
-                        });
-                    });
-                }
-            });
-        } else {
-            res.render('attendance/select_date', {
-                batch,
-                nextURL: "/view_attendance"
-            });
-        }
-    } else {
-        StudentModel.distinct('batch', { deleted: '' }, (err, batches) => {
+    if (batch ^ date) { // only 1 is present
+        req.flash('error_msgs', 'Please fill in all required fields');
+    }
+    if (!batch || !date) {
+        BatchModel.find({}, "name", { sort: { name: 1 } }, (err, batches) => {
             if (err) {
                 console.log(err);
             }
-            res.render('attendance/select_batch', {
-                batches,
-                nextURL: "/view_attendance"
+            res.render('attendance/select_branch_date', {
+                nextURL: "/view_attendance",
+                batches
             });
         });
+        return;
     }
+    DateModel.findOne({ date, batch }, null, {}, (err, dateModel) => {
+        if (err) {
+            console.log(err);
+        }
+        if (!dateModel) {
+            res.render('attendance/attendance', {
+                students: [], batch, error: "No attendance has been taken for this day", date: new Date(date)
+            });
+        } else {
+            const date = new Date(dateModel.date);
+            StudentModel.find({
+                created: { $lte: date },
+                $or: [{ deleted: null }, { deleted: { $gt: date } }],
+                batch,
+            }, 'name attendance', { sort: { name: 1, created: 1 } }, (err, students) => {
+                if (err) {
+                    console.log(err);
+                }
+                res.render('attendance/attendance', {
+                    students, batch, date
+                });
+            });
+        }
+    });
 };
 
 module.exports = attendanceRoutes;

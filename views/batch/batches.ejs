@@ -1,13 +1,11 @@
 <% include ../layouts/header %>
 
 <div class="container container-fluid mt-3 text-dark text-center">
-    <div class="heading-1 bold mb-3">Students</div>
+    <div class="heading-1 bold mb-3">Batches</div>
     <% include ../layouts/messages %>
 
-    <a class="btn btn-secondary mb-2" href="/all_students">All Students</a>
-    <br>
-    <button type="button" class="btn btn-primary glyphicon mb-4" data-toggle="modal" data-target="#studentModal"
-        data-id=""><span>&#x2b;</span> Add Student</button>
+    <button type="button" class="btn btn-primary glyphicon mb-4" data-toggle="modal" data-target="#batchModal"
+        data-id=""><span>&#x2b;</span> Add Batch</button>
 
     <div class="row text-center">
         <table class="table table-bordered">
@@ -15,23 +13,19 @@
                 <tr>
                     <th scope="col">Sr. No.</th>
                     <th scope="col">Name</th>
-                    <th scope="col">Batch</th>
                     <th scope="col">Edit</th>
                 </tr>
             </thead>
             <tbody>
-                <% if (students.length != 0) { %>
+                <% if (batches.length != 0) { %>
                 <% let sr = 1; %>
-                <% let batch = ''; %>
-                <% students.forEach(student => { %>
+                <% batches.forEach(batch => { %>
                 <tr>
-                    <% if(batch != student.batch) { sr = 1; batch = student.batch; } %>
                     <td scope="row"><%= sr %></td>
-                    <td scope="row"><%= student.name %></td>
-                    <td scope="row"><%= student.batch %></td>
+                    <td scope="row"><%= batch.name %></td>
                     <td scope="row"><span class="glyphicon" style="cursor: pointer;" data-toggle="modal"
-                            data-target="#studentModal" data-name="<%= student.name %>"
-                            data-batch="<%= student.batch %>" data-id="<%= student.id %>">&#x270f;</span>
+                            data-target="#batchModal" data-name="<%= batch.name %>"
+                            data-id="<%= batch.id %>">&#x270f;</span>
                     </td>
                     <% sr += 1 %>
                 </tr>
@@ -41,29 +35,21 @@
         </table>
     </div>
 
-    <div class="modal fade" id="studentModal" tabindex="-1" role="dialog" aria-labelledby="studentModalLabel"
+    <div class="modal fade" id="batchModal" tabindex="-1" role="dialog" aria-labelledby="batchModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="studentModalLabel">Edit Student</h5>
+                    <h5 class="modal-title" id="batchModalLabel">Edit Batch</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form class="student-form" action="/modify_student" method="POST">
+                    <form class="batch-form" action="/modify_batch" method="POST">
                         <div class="form-group">
                             <label for="name" class="col-form-label required">Name</label>
                             <input type="text" class="form-control name_input" name="name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="batch" class="col-form-label required">Batch</label>
-                            <select name="batch" class="form-control batch_input" required>
-                                <% batches.forEach(batch => { %>
-                                <option value="<%= batch.name %>"><%= batch.name %></option>
-                                <% } %>
-                            </select>
                         </div>
                         <input type="text" class="form-control id_input" name="id" hidden>
                     </form>
@@ -81,24 +67,23 @@
 <% include ../layouts/footer %>
 
 <script>
-    $('#studentModal').on('show.bs.modal', function (event) {
+    $('#batchModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
         var modal = $(this);
         var id = button.data('id');
         modal.find('.id_input').val(id);
         modal.find('.name_input').val(button.data('name'));
-        if (button.data('batch')) {
-            modal.find('.batch_input').val(button.data('batch'));
-        }
-        if (id == "") {
-            modal.find('.delete-button').hide();
-        } else {
-            modal.find('.delete-button').on('click', function (event) {
-                location.href = '/delete_student/' + id;
-            });
-        }
+        // if (id == "") {
+        //     modal.find('.delete-button').hide();
+        // } else {
+        //     modal.find('.delete-button').on('click', function (event) {
+        //         location.href = '/delete_batch/' + id;
+        //     });
+        // }
+        // We never want batches to be deleted
+        modal.find('.delete-button').hide();
         $(".save-button").click(function () {
-            $(".student-form").submit();
+            $(".batch-form").submit();
         });
     })
 </script>

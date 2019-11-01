@@ -5,16 +5,22 @@
         <div class="col-md-1 col-lg-2 col-xl-3"></div>
         <div class="col-md-10 col-lg-8 col-xl-6 d-flex flex-column align-items-center justify-content-around">
             <% include ../layouts/messages %>
-            <div class="my-3 heading-3 bold">Select Date</div>
-
+            <div class="my-3 heading-3 bold">Select Branch and Date</div>
             <form action="<%= nextURL %>" method="GET">
                 <div class="row text-center d-flex flex-column">
+                    <div class="form-group">
+                        <label class="required bold" for="batch">Batch</label>
+                        <select name="batch" class="form-control batch_input" required>
+                            <% batches.forEach(batch => { %>
+                            <option value="<%= batch.name %>"><%= batch.name %></option>
+                            <% }); %>
+                        </select>
+                    </div>
                     <div class="form-group">
                         <label class="required bold" for="date">Date</label>
                         <input type="date" class="form-control" id="date-input" value="" min="2019-11-01" max=""
                             name="date" required>
                     </div>
-                    <input type="text" name="batch" value="<%= batch %>" required hidden>
                     <button type="submit" class="btn btn-outline-danger pl-4 pr-4">Go!</button>
                 </div>
             </form>

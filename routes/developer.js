@@ -2,6 +2,7 @@ const express = require('express');
 const AdminModel = require('../models/admin');
 const StudentModel = require('../models/student');
 const DateModel = require('../models/date');
+const BatchModel = require('../models/batch');
 
 const router = express.Router();
 
@@ -15,6 +16,16 @@ router.get('/students', (_req, res) => {
             res.send(err);
         } else {
             res.json(students);
+        }
+    });
+});
+
+router.get('/batches', (_req, res) => {
+    BatchModel.find({}, null, null, (err, batches) => {
+        if (err) {
+            res.send(err);
+        } else {
+            res.json(batches);
         }
     });
 });
@@ -57,6 +68,12 @@ router.get('/del_dates', (_req, res) => {
     });
 });
 
+router.get('/del_batches', (_req, res) => {
+    BatchModel.deleteMany({}, (err) => {
+        res.send(err);
+    });
+});
+
 router.get('/rem_att', (_req, res) => {
     DateModel.deleteMany({}, (err) => {
         res.send(err);
@@ -82,6 +99,9 @@ router.get('/clear', (_req, res) => {
         if(err) res.send(err);
     });
     StudentModel.deleteMany({}, (err) => {
+        if(err) res.send(err);
+    });
+    BatchModel.deleteMany({}, (err) => {
         if(err) res.send(err);
     });
     res.send("");

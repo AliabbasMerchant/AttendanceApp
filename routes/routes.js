@@ -3,6 +3,7 @@ const auth = require('../config/auth');
 
 const adminRoutes = require('./admin');
 const studentRoutes = require('./student');
+const batchRoutes = require('./batch');
 const attendanceRoutes = require('./attendance');
 
 const router = express.Router();
@@ -30,6 +31,12 @@ router.get('/all_students', auth.isAdminLoggedIn, studentRoutes.allStudentsGetRo
 router.post('/modify_student', auth.isAdminLoggedIn, studentRoutes.modifyStudentPostRoute);
 
 router.get('/delete_student/:id', auth.isAdminLoggedIn, studentRoutes.deleteStudentGetRoute);
+
+router.get('/batches', auth.isAdminLoggedIn, batchRoutes.batchesGetRoute);
+
+router.post('/modify_batch', auth.isAdminLoggedIn, batchRoutes.modifyBatchPostRoute);
+
+router.get('/delete_batch/:id', auth.isAdminLoggedIn, batchRoutes.deleteBatchGetRoute);
 
 router.get('/attendance', auth.isAdminLoggedIn, attendanceRoutes.attendanceGetRoute);
 
