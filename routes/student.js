@@ -59,11 +59,12 @@ studentRoutes.allStudentsGetRoute = (req, res) => {
 
 studentRoutes.modifyStudentPostRoute = (req, res) => {
     const { id, name, batch } = req.body;
-    if (!name) {
+    if (!name || !batch) {
         req.flash('error_msgs', 'Please fill in all required fields');
         res.redirect('/students');
         return;
     }
+    // TODO check if batch is invalid
     if (!id) { // create new student
         const created = new Date((new Date()).setUTCHours(0,0,0,0));
         const newStudentModel = new StudentModel({ name, batch, created });

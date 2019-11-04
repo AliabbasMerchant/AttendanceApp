@@ -2,6 +2,8 @@
 nodemon.json
 ejs_lint.js
 
+*/*.csv
+
 # Logs
 logs
 *.log

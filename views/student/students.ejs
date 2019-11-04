@@ -4,9 +4,12 @@
     <div class="heading-1 bold mb-3">Students</div>
     <% include ../layouts/messages %>
 
-    <a class="btn btn-secondary mb-2" href="/all_students">All Students</a>
+    <a class="btn btn-secondary mb-3" href="/all_students">All Students</a>
     <br>
-    <button type="button" class="btn btn-primary glyphicon mb-4" data-toggle="modal" data-target="#studentModal"
+    <% batches.forEach(batch => { %>
+        <a type="button" class="btn btn-primary my-1" href="/students?batch=<%= batch.name %>"><%= batch.name %></a><br>
+    <% }); %>
+    <button type="button" class="btn btn-primary glyphicon my-3" data-toggle="modal" data-target="#studentModal"
         data-id=""><span>&#x2b;</span> Add Student</button>
 
     <div class="row text-center table-responsive mx-auto">
