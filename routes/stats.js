@@ -25,7 +25,7 @@ statsRoutes.viewSpanAttendanceGetRoute = (req, res) => {
     }
     startDate = new Date((new Date(startDate)).setUTCHours(0,0,0,0));
     endDate = new Date((new Date(endDate)).setUTCHours(0,0,0,0));
-    DateModel.find({ date: { $gte: startDate, $lte: endDate }, batch }, (err, dateModels) => {
+    DateModel.find({ date: { $gte: startDate, $lte: endDate }, batch }, null, { sort: { date: 1 } }, (err, dateModels) => {
         if (err) {
             console.log(err);
         }
