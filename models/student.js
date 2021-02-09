@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const studentSchema = mongoose.Schema({
     name: { type: String, required: true },
+    phone_number: { type: String, required: false },
     batch: { type: String, required: true },
     created: { type: Date, required: true },
     deleted: { type: Date },

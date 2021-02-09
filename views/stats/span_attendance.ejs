@@ -15,6 +15,7 @@
                     <tr>
                         <th scope="col">Sr. No.</th>
                         <th scope="col">Name</th>
+                        <th scope="col">Phone Number</th>
                         <% dates.forEach(date => { %>
                         <th scope="col" class="date"><%= date %></th>
                         <% }); %>
@@ -31,6 +32,7 @@
                     <tr>
                         <td scope="col"><%= sr %></td>
                         <td scope="col"><%= student.name %></td>
+                        <td scope="col" class="phone_number"><%= student.phone_number %></td>
 
                         <% let present = 0; let total = 0;
                         dates.forEach(date => {

@@ -19,6 +19,7 @@
                             <tr>
                                 <th scope="col">Sr. No.</th>
                                 <th scope="col">Name</th>
+                                <th scope="col">Phone Number</th>
                                 <th scope="col">Present</th>
                             </tr>
                         </thead>
@@ -29,6 +30,7 @@
                             <tr>
                                 <td scope="row"><%= sr %></td>
                                 <td scope="row"><%= student.name %></td>
+                                <td scope="row" class="phone_number"><%= student.phone_number %></td>
                                 <td>
                                     <!-- Thanks to: https://stackoverflow.com/a/25764926/8068699 for the checkbox hack -->
                                     <% if(typeof(student.attendance) == 'undefined') { %>

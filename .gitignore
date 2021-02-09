@@ -1,3 +1,5 @@
+backups
+
 .vscode/*
 nodemon.json
 ejs_lint.js

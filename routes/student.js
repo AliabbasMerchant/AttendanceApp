@@ -9,7 +9,7 @@ studentRoutes.studentsGetRoute = (req, res) => {
         if (err) console.log(err);
         if (batches.length) {
             if (batch) {
-                StudentModel.find({ deleted: '', batch }, 'name batch', { sort: { batch: 1, name: 1, created: 1 } }, (err, students) => {
+                StudentModel.find({ deleted: '', batch }, 'name phone_number batch', { sort: { batch: 1, name: 1, created: 1 } }, (err, students) => {
                     if (err) {
                         console.log(err);
                     }
@@ -18,7 +18,7 @@ studentRoutes.studentsGetRoute = (req, res) => {
                     });
                 });
             } else {
-                StudentModel.find({ deleted: '' }, 'name batch', { sort: { batch: 1, name: 1, created: 1 } }, (err, students) => {
+                StudentModel.find({ deleted: '' }, 'name phone_number batch', { sort: { batch: 1, name: 1, created: 1 } }, (err, students) => {
                     if (err) {
                         console.log(err);
                     }
@@ -37,7 +37,7 @@ studentRoutes.studentsGetRoute = (req, res) => {
 studentRoutes.allStudentsGetRoute = (req, res) => {
     let batch = req.query.batch;
     if (batch) {
-        StudentModel.find({ batch }, 'name batch created deleted', { sort: { batch: 1, name: 1, created: 1 } }, (err, students) => {
+        StudentModel.find({ batch }, 'name phone_number batch created deleted', { sort: { batch: 1, name: 1, created: 1 } }, (err, students) => {
             if (err) {
                 console.log(err);
             }
@@ -46,7 +46,7 @@ studentRoutes.allStudentsGetRoute = (req, res) => {
             });
         });
     } else {
-        StudentModel.find({}, 'name batch created deleted', { sort: { batch: 1, name: 1, created: 1 } }, (err, students) => {
+        StudentModel.find({}, 'name phone_number batch created deleted', { sort: { batch: 1, name: 1, created: 1 } }, (err, students) => {
             if (err) {
                 console.log(err);
             }
@@ -58,7 +58,7 @@ studentRoutes.allStudentsGetRoute = (req, res) => {
 };
 
 studentRoutes.modifyStudentPostRoute = (req, res) => {
-    const { id, name, batch } = req.body;
+    const { id, name, phone_number, batch } = req.body;
     if (!name || !batch) {
         req.flash('error_msgs', 'Please fill in all required fields');
         res.redirect('/students');
@@ -67,7 +67,7 @@ studentRoutes.modifyStudentPostRoute = (req, res) => {
     // TODO check if batch is invalid
     if (!id) { // create new student
         const created = new Date((new Date()).setUTCHours(0,0,0,0));
-        const newStudentModel = new StudentModel({ name, batch, created });
+        const newStudentModel = new StudentModel({ name, phone_number, batch, created });
         newStudentModel.save()
             .then(_student => {
                 req.flash('success_msgs', 'Added New Student!');
@@ -75,7 +75,7 @@ studentRoutes.modifyStudentPostRoute = (req, res) => {
             })
             .catch(err => console.log(err));
     } else {
-        const update = { $set: { name, batch } };
+        const update = { $set: { name, phone_number, batch } };
         StudentModel.findOneAndUpdate({ _id: id }, update, { new: true, upsert: false }, (err, _student) => {
             if (err) console.log(err);
             else {

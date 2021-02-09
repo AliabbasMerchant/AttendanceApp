@@ -9,6 +9,7 @@
                 <tr>
                     <th scope="col">Sr. No.</th>
                     <th scope="col">Name</th>
+                    <th scope="col">Phone Number</th>
                     <th scope="col">Batch</th>
                     <th scope="col">Created</th>
                     <th scope="col">Deleted</th>
@@ -23,6 +24,7 @@
                     <% if(batch != student.batch) { sr = 1; batch = student.batch; } %>
                     <td scope="row"><%= sr %></td>
                     <td scope="row"><a href="/view_student?id=<%= student._id %>"><%= student.name %></a></td>
+                    <td scope="row" class="phone_number"><%= student.phone_number %></td>
                     <td scope="row"><%= student.batch %></td>
                     <td scope="row" class="date"><%= student.created %></td>
                     <td scope="row" class="date"><%= student.deleted %></td>

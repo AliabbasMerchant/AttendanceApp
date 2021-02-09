@@ -42,7 +42,7 @@ statsRoutes.viewSpanAttendanceGetRoute = (req, res) => {
                 created: { $lte: endDate },
                 $or: [{ deleted: null }, { deleted: { $gt: startDate } }],
                 batch,
-            }, 'name attendance created deleted', { sort: { name: 1, created: 1 } }, (err, students) => {
+            }, 'name phone_number attendance created deleted', { sort: { name: 1, created: 1 } }, (err, students) => {
                 if (err) {
                     console.log(err);
                 }

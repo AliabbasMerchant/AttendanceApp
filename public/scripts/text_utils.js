@@ -13,4 +13,18 @@ $(document).ready(function () {
             $(this).text('-');
         }
     });
+    $('.phone_number').each(function (_index, _element) {
+        var text = $(this).text();
+        if (text) {
+            var numbers = text.split(',');
+            var numberHTMLs = [];
+            numbers.forEach(number => {
+                number = number.trim();
+                numberHTMLs.push('<a href="tel:' + number + '">' + number + '</a>');
+            });
+            $(this).html(numberHTMLs.join(', '));
+        } else {
+            $(this).text('-');
+        }
+    });
 });
